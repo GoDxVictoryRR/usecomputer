@@ -1,0 +1,3 @@
+#!/bin/bash
+# Wrapper to forward usecomputer commands from WSL2 to the Windows host
+/mnt/c/Windows/system32/cmd.exe /c npx usecomputer "$@"
