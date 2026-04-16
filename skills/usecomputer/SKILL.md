@@ -1,7 +1,7 @@
 ---
 name: usecomputer
 description: Control your Windows Host from WSL2 — screenshot, click, type, press key.
-version: 1.4.0
+version: 1.5.0
 author: remorses
 license: MIT
 platforms: [macos, linux, windows]
@@ -19,21 +19,21 @@ Control your computer's desktop using a native Windows bridge.
 ## Procedure
 
 > [!IMPORTANT]
-> **YOU MUST USE THE WRAPPER SCRIPT IN THE PROJECT ROOT:**
-> `./usecomputer-wsl`
+> **YOU MUST USE THE WRAPPER SCRIPT AT THIS EXACT PATH:**
+> `/home/hardi/usecomputer-wsl`
 >
-> 1. To see the screen: `./usecomputer-wsl screenshot ./shot.png --json`
+> 1. To see the screen: `/home/hardi/usecomputer-wsl screenshot ./shot.png --json`
 > 2. To open an App (e.g. Epic Games):
->    - `./usecomputer-wsl press "ctrl+escape"`
->    - `./usecomputer-wsl type "Epic Games"`
->    - `./usecomputer-wsl press "enter"`
+>    - `/home/hardi/usecomputer-wsl press "ctrl+escape"`
+>    - `/home/hardi/usecomputer-wsl type "Epic Games"`
+>    - `/home/hardi/usecomputer-wsl press "enter"`
 
 ## Quick Reference table for the AI
 
 | Action | Command |
 | --- | --- |
-| **Open Start Menu** | `./usecomputer-wsl press "ctrl+escape"` |
-| **Launch App** | `./usecomputer-wsl press "ctrl+escape"`, then type name, then press "enter" |
+| **Open Start Menu** | `/home/hardi/usecomputer-wsl press "ctrl+escape"` |
+| **Launch App** | `/home/hardi/usecomputer-wsl press "ctrl+escape"`, then type name, then press "enter" |
 
 ## Pitfalls
 
