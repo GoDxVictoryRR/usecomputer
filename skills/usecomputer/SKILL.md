@@ -1,63 +1,54 @@
 ---
 name: usecomputer
-description: Control the desktop — screenshot, click, type, scroll via native CLI
-version: 1.1.0
+description: Control your Windows Host from WSL2 — screenshot, click, type, press key.
+version: 1.2.0
 author: remorses
 license: MIT
 platforms: [macos, linux, windows]
 metadata:
   hermes:
     tags: [automation, desktop, computer-use, screenshot, mouse, keyboard]
-    usage: "Use this skill for all desktop control tasks, including screenshots, mouse clicks, and keyboard input on the host machine."
+    usage: "Use this skill to control the Windows desktop from your WSL2 environment."
     fallback_for_tools: [browser_navigate]
 ---
 
-Control your computer's desktop using native CLI commands for screenshots and input.
+Control your computer's desktop using a native Windows bridge from your WSL2 session.
 
 ## Prerequisites
 
-- usecomputer CLI installed (`npm install -g usecomputer`)
-- Desktop session with accessibility permissions (macOS) or X11/XWayland (Linux/WSL2 with `DISPLAY=:0`)
-
-## When to Use
-
-- When you need to interact with local apps or the OS GUI.
-- When browser-based automation tools are blocked or insufficient.
+- `usecomputer` installed on Windows (`npm install -g usecomputer` on the Windows host).
+- WSL2 environment with Windows interop enabled (default).
 
 ## Quick Reference
 
-| Action | Command |
+| Action | Bridge Command |
 | --- | --- |
-| **Screenshot** | `usecomputer screenshot ./shot.png --json` |
-| **Click** | `usecomputer click -x 400 -y 300 --coord-map "MAP"` |
-| **Type** | `usecomputer type "hello text"` |
-| **Press Key** | `usecomputer press "meta+r"` (Use `meta` for Windows key) |
-| **Drag** | `usecomputer drag 400,300 600,400 --coord-map "MAP"` |
-| **Scroll** | `usecomputer scroll --direction down --amount 5` |
+| **Screenshot** | `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer screenshot ./shot.png --json` |
+| **Click** | `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer click -x 400 -y 300 --coord-map "MAP"` |
+| **Type** | `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer type "text"` |
+| **Press Key** | `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer press "win"` |
 
 ## Procedure
 
 > [!IMPORTANT]
-> **YOU MUST USE THE `usecomputer` COMMAND FOR ALL ACTIONS.**
-> Do NOT attempt to run Windows apps like `notepad` directly in the terminal.
-> ALWAYS start by taking a screenshot to see current screen state.
+> **YOU MUST USE THE FULL `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer` COMMAND.**
+> This is a bridge that allows you to control the Windows Host from WSL2.
+> Do NOT use any other command for desktop interaction.
 
-1. **SEE THE SCREEN**: Run `usecomputer screenshot ./screen.png --json`
-2. **GET COORDINATES**: Find the X/Y target and copy the `coordMap` string from the JSON output.
-3. **CLICK/DRAG**: Use the coordinates and the `coordMap`: `usecomputer click -x 600 -y 400 --coord-map "MAP"`
-4. **TYPE TEXT**: Click the target field first, then: `usecomputer type "your message"`
-5. **LAUNCH APPS (Windows)**:
-   - Run `usecomputer press "meta+r"` to open the Run dialog.
-   - Run `usecomputer type "notepad"` then `usecomputer press "enter"`.
-6. **VERIFY**: Always take a new screenshot to confirm your action worked.
+1. **SEE THE SCREEN**: Capture a screenshot to see the Windows desktop:
+   `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer screenshot ./screen.png --json`
+2. **EXTRACT DATA**: Get the coordinates and the `coordMap` from the JSON output.
+3. **CONTROL HOST**:
+   - To click: `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer click -x X -y Y --coord-map "MAP"`
+   - To open apps: `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer press "win"` then type the app name.
 
 ## Pitfalls
 
-- **WSL2 Interaction**: You MUST set `export DISPLAY=:0` in your terminal environment to control the Windows host.
-- **Safety**: Do NOT click top-left (0-200, 0-200) as this triggers OS menus. 
-- **CoordMap**: You MUST pass the `--coord-map` from the LATEST screenshot or clicks will fail.
+- **Paths**: Always use `./` for screenshot paths to ensure they save in your current WSL directory.
+- **Modifiers**: Use `win` (not `meta` or `cmd`) for the Windows key when using this bridge.
+- **CoordMap**: You MUST pass the `--coord-map` from the LATEST screenshot.
 
 ## Verification
 
-1. Run `usecomputer screenshot ./verify.png --json`
-2. Confirm the expected UI state is visible in the captured image.
+1. Take a screenshot: `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer screenshot ./verify.png --json`
+2. Confirm the host window is visible in the captured image.
