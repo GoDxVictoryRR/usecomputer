@@ -23,8 +23,8 @@ Control your computer's desktop using a native Windows bridge from your WSL2 ses
 > `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer`
 >
 > 1. To see the screen: `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer screenshot ./shot.png --json`
-> 2. To open Epic Games:
->    - `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer press "win"`
+> 2. To open an App (e.g. Epic Games):
+>    - `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer press "ctrl+escape"`
 >    - `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer type "Epic Games"`
 >    - `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer press "enter"`
 
@@ -32,10 +32,11 @@ Control your computer's desktop using a native Windows bridge from your WSL2 ses
 
 | Action | Bridge Command |
 | --- | --- |
-| **Press Windows Key** | `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer press "win"` |
-| **Launch App** | `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer press "win"`, then type name, then press "enter" |
+| **Open Start Menu** | `/mnt/c/Windows/system32/cmd.exe /c npx usecomputer press "ctrl+escape"` |
+| **Launch App** | `press "ctrl+escape"`, then type name, then press "enter" |
 
 ## Pitfalls
 
+- **DO NOT USE "win"**: The "win" key code is unstable. Always use "ctrl+escape" to open the Windows Start menu.
 - **NEVER** use `execute_code`. The tool is a CLI binary, not a python library.
 - **NEVER** use `browser_navigate`. This is for web, not desktop.

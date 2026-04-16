@@ -2007,7 +2007,7 @@ const ParsedPress = struct {
 };
 
 fn parseModifierToken(token: []const u8, modifiers: *ParsedModifiers) bool {
-    if (std.ascii.eqlIgnoreCase(token, "cmd") or std.ascii.eqlIgnoreCase(token, "command") or std.ascii.eqlIgnoreCase(token, "meta")) {
+    if (std.ascii.eqlIgnoreCase(token, "cmd") or std.ascii.eqlIgnoreCase(token, "command") or std.ascii.eqlIgnoreCase(token, "meta") or std.ascii.eqlIgnoreCase(token, "win") or std.ascii.eqlIgnoreCase(token, "windows") or std.ascii.eqlIgnoreCase(token, "super")) {
         modifiers.cmd = true;
         return true;
     }
@@ -2270,6 +2270,7 @@ fn keyCodeForMacosKey(key_name: []const u8) !c_macos.CGKeyCode {
     if (std.ascii.eqlIgnoreCase(key_name, "f10")) return mac_keycode.f10;
     if (std.ascii.eqlIgnoreCase(key_name, "f11")) return mac_keycode.f11;
     if (std.ascii.eqlIgnoreCase(key_name, "f12")) return mac_keycode.f12;
+    if (std.ascii.eqlIgnoreCase(key_name, "command") or std.ascii.eqlIgnoreCase(key_name, "cmd") or std.ascii.eqlIgnoreCase(key_name, "meta")) return mac_keycode.command;
 
     return error.UnknownKey;
 }
@@ -2370,6 +2371,7 @@ fn keyCodeForWindowsKey(key_name: []const u8) !u16 {
     }
 
     if (std.ascii.eqlIgnoreCase(key_name, "enter") or std.ascii.eqlIgnoreCase(key_name, "return")) return c_windows.VK_RETURN;
+    if (std.ascii.eqlIgnoreCase(key_name, "win") or std.ascii.eqlIgnoreCase(key_name, "windows") or std.ascii.eqlIgnoreCase(key_name, "super") or std.ascii.eqlIgnoreCase(key_name, "meta") or std.ascii.eqlIgnoreCase(key_name, "command") or std.ascii.eqlIgnoreCase(key_name, "cmd")) return c_windows.VK_LWIN;
     if (std.ascii.eqlIgnoreCase(key_name, "tab")) return c_windows.VK_TAB;
     if (std.ascii.eqlIgnoreCase(key_name, "space")) return c_windows.VK_SPACE;
     if (std.ascii.eqlIgnoreCase(key_name, "escape") or std.ascii.eqlIgnoreCase(key_name, "esc")) return c_windows.VK_ESCAPE;
@@ -2490,6 +2492,7 @@ fn keySymForX11Key(key_name: []const u8) !c_ulong {
     if (std.ascii.eqlIgnoreCase(key_name, "end")) return c_x11.XK_End;
     if (std.ascii.eqlIgnoreCase(key_name, "pageup")) return c_x11.XK_Page_Up;
     if (std.ascii.eqlIgnoreCase(key_name, "pagedown")) return c_x11.XK_Page_Down;
+    if (std.ascii.eqlIgnoreCase(key_name, "super") or std.ascii.eqlIgnoreCase(key_name, "win") or std.ascii.eqlIgnoreCase(key_name, "meta") or std.ascii.eqlIgnoreCase(key_name, "command") or std.ascii.eqlIgnoreCase(key_name, "cmd")) return c_x11.XK_Super_L;
     return error.UnknownKey;
 }
 
