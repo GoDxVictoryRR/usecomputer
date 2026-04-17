@@ -1,74 +1,108 @@
 ---
 name: usecomputer
-description: Control your Windows Host from WSL2 — screenshot, click, type, press, scroll, drag, hover, debug-point, system-lists.
-version: 2.2.0
+description: Control your Windows Host from WSL2 — screenshot, click, type, press, scroll, drag.
+version: 3.0.0
 author: remorses
 license: MIT
 platforms: [macos, linux, windows]
 metadata:
   hermes:
     tags: [automation, desktop, computer-use, screenshot, mouse, keyboard]
-    usage: "MANDATORY: Use ONLY the terminal for this skill. DO NOT USE EXECUTE_CODE OR BROWSER_NAVIGATE."
+    usage: "MANDATORY: Use ONLY the terminal tool. DO NOT use browser_navigate, execute_code, or Python."
     fallback_for_tools: [browser_navigate]
 ---
 
-# MANDATORY: DO NOT USE PYTHON OR BROWSER TOOLS FOR THIS SKILL.
+# usecomputer — Windows Desktop Automation via WSL2
 
-Control your computer's desktop using a native Windows bridge. This tool provides full 100% parity with the `remorses/usecomputer` standard, executing all commands natively on the host.
+You control the Windows desktop by running shell commands through this bridge:
 
-## Procedure
+```
+/home/hardi/usecomputer-wsl <command> [args]
+```
 
-> [!IMPORTANT]
-> **YOU MUST USE THE WRAPPER SCRIPT AT THIS EXACT PATH:**
-> `/home/hardi/usecomputer-wsl`
->
-> 1. **To see the screen**: `/home/hardi/usecomputer-wsl screenshot ./shot.png --json`
-> 2. **To click something**: 
->    - Perform step 1 to take a screenshot.
->    - Locate the coordinates in the image or ask the user.
->    - Run: `/home/hardi/usecomputer-wsl click -x <x> -y <y>`
+---
 
-## Comprehensive Command List (Explicit remorses/usecomputer API Parity)
+## STEP-BY-STEP RECIPES
 
-| Action | Command / Granular Flags Supported |
-| :--- | :--- |
-| **Screenshot** | `screenshot [path] [--display id] [--window id] [--region <x,y,w,h>] [--annotate] [--json]` |
-| **Debug Point**| `debug-point -x <x> -y <y> --output ./debug.png --json` (Validates click target visually) |
-| **Click**      | `click -x <x> -y <y> [--button left/right/middle] [--count n] [--modifier shift/cmd/ctrl/alt]` |
-| **Hover/Move** | `hover -x <x> -y <y>`  (Or `mouse move -x <x> -y <y>`) |
-| **Drag**       | `drag <from_x,y> <to_x,y> [bezier_cp_x,y] [--button left/right/middle]` (Supports curves) |
-| **Scroll**     | `scroll <up/down/left/right> [amount] [--at <x,y>]` |
-| **Type Text**  | `type "Hello" [--delay ms] | Or via pipe: `cat file \| /home/hardi/usecomputer-wsl type --stdin [--chunk-size n] [--chunk-delay ms] [--max-length n]` |
-| **Press Key**  | `press "ctrl+escape"` (Supports combos: "cmd+shift+p", "enter") `[--count n] [--delay ms]` |
-| **Inspect Env**| `window list --json`, `display list --json`, `desktop list --windows --json` |
-| **Mouse State**| `mouse position --json`, `mouse down [--button right]`, `mouse up` |
+### Recipe 1: Open any application
+```bash
+/home/hardi/usecomputer-wsl press "ctrl+escape"
+sleep 1
+/home/hardi/usecomputer-wsl type "Notepad"
+sleep 1
+/home/hardi/usecomputer-wsl press "enter"
+sleep 2
+```
 
-## Pitfalls
+### Recipe 2: Take a screenshot and analyze it
+```bash
+/home/hardi/usecomputer-wsl screenshot /tmp/shot.png --json
+# Then analyze /tmp/shot.png using your vision to find coordinates
+```
 
-- **NEVER FAKE JSON STRINGS**: Do not pass complex JSON or --coord-map to the click command. Keep it simple.
-- **NEVER GUESS COORDINATES**: Do not make up x/y values. If you are unsure, ask the user: "Where is the [button name]? Please give me x/y coordinates."
-- **DO NOT USE "win"**: Use "ctrl+escape" for the Start menu.
-- **NEVER** use `execute_code` or `python`. Always use the bridge script.
->
-> 1. **To see the screen**: `/home/hardi/usecomputer-wsl screenshot ./shot.png --json`
-> 2. **To click something**: Perform step 1, find the x/y coordinates of your target, then run:
->    `/home/hardi/usecomputer-wsl click -x <x> -y <y> --coord-map "<coordMap_from_json>"`
-> 3. **To open an App (Visual Click)**:
->    - `/home/hardi/usecomputer-wsl press "ctrl+escape"`
->    - `/home/hardi/usecomputer-wsl type "Epic Games Launcher"`
->    - `/home/hardi/usecomputer-wsl screenshot ./search.png --json`
->    - (Find the "Open" button in `search.png` and click it)
+### Recipe 3: Click a button you can see in a screenshot
+```bash
+# First take a screenshot to find coords
+/home/hardi/usecomputer-wsl screenshot /tmp/shot.png --json
+# Then click using the x,y you identified from the image
+/home/hardi/usecomputer-wsl click -x 800 -y 400
+```
 
-## Quick Reference table for the AI
+### Recipe 4: Type text into a focused window
+```bash
+/home/hardi/usecomputer-wsl type "Hello World"
+# For large text, pipe it:
+echo "big text here" | /home/hardi/usecomputer-wsl type --stdin
+```
+
+### Recipe 5: Save a file (Ctrl+S or Ctrl+Shift+S)
+```bash
+/home/hardi/usecomputer-wsl press "ctrl+s"
+sleep 1
+# If Save As dialog appears, type the filename and press enter
+/home/hardi/usecomputer-wsl type "C:\\Users\\hardi\\Desktop\\test.txt"
+/home/hardi/usecomputer-wsl press "enter"
+```
+
+### Recipe 6: Close an application
+```bash
+/home/hardi/usecomputer-wsl press "alt+f4"
+```
+
+---
+
+## Full Command Reference
 
 | Action | Command |
-| --- | --- |
-| **Screenshot** | `/home/hardi/usecomputer-wsl screenshot ./shot.png --json` |
-| **Click** | `/home/hardi/usecomputer-wsl click -x 500 -y 500 --coord-map "..."` |
-| **Open Start** | `/home/hardi/usecomputer-wsl press "ctrl+escape"` |
+| :--- | :--- |
+| **Screenshot** | `/home/hardi/usecomputer-wsl screenshot /tmp/shot.png --json` |
+| **Click (left)** | `/home/hardi/usecomputer-wsl click -x <x> -y <y>` |
+| **Right click** | `/home/hardi/usecomputer-wsl click -x <x> -y <y> --button right` |
+| **Double click** | `/home/hardi/usecomputer-wsl click -x <x> -y <y> --count 2` |
+| **Click+Modifier**| `/home/hardi/usecomputer-wsl click -x <x> -y <y> --modifier shift` |
+| **Type text** | `/home/hardi/usecomputer-wsl type "text here"` |
+| **Type (stdin)** | `echo "text" \| /home/hardi/usecomputer-wsl type --stdin` |
+| **Press key** | `/home/hardi/usecomputer-wsl press "enter"` |
+| **Key combo** | `/home/hardi/usecomputer-wsl press "ctrl+s"` |
+| **Repeat key** | `/home/hardi/usecomputer-wsl press "down" --count 5` |
+| **Scroll** | `/home/hardi/usecomputer-wsl scroll down 3` |
+| **Scroll at pos** | `/home/hardi/usecomputer-wsl scroll down 3 --at 960,540` |
+| **Drag** | `/home/hardi/usecomputer-wsl drag 100,200 500,600` |
+| **Hover** | `/home/hardi/usecomputer-wsl hover -x <x> -y <y>` |
+| **Mouse move** | `/home/hardi/usecomputer-wsl mouse move -x <x> -y <y>` |
+| **Mouse pos** | `/home/hardi/usecomputer-wsl mouse position --json` |
+| **Window list** | `/home/hardi/usecomputer-wsl window list --json` |
+| **Display list** | `/home/hardi/usecomputer-wsl display list --json` |
+| **Debug click** | `/home/hardi/usecomputer-wsl debug-point -x <x> -y <y> --output /tmp/debug.png` |
 
-## Pitfalls
+---
 
-- **DO NOT USE "win"**: Use "ctrl+escape" for the Start menu.
-- **NEVER** use `execute_code`.
-- **COORDINATES**: Always use the `--coord-map` returned by the `screenshot` command for accurate clicking.
+## STRICT RULES — NEVER BREAK THESE
+
+1. **ALWAYS use `/home/hardi/usecomputer-wsl`** — never call `npx usecomputer` directly
+2. **ALWAYS use `/tmp/` for screenshots** — never use `/mnt/c/temp/` or other paths
+3. **NEVER use `browser_navigate` or `execute_code` or Python** for this skill
+4. **NEVER press `win`, `win+r`, or `ctrl+alt+delete`** — use `ctrl+escape` to open Start
+5. **NEVER guess coordinates** — always take a screenshot first and identify the real x,y
+6. **NEVER pass `--coord-map`** to click — just use `-x` and `-y` directly
+7. **For Windows paths in dialogs** — use backslashes: `C:\\Users\\hardi\\Desktop\\test.txt`
