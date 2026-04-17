@@ -1,7 +1,7 @@
 ---
 name: usecomputer
 description: Control your Windows Host from WSL2 — screenshot, click, type, press, scroll, drag.
-version: 4.0.0
+version: 4.1.0
 author: remorses
 license: MIT
 platforms: [macos, linux, windows]
@@ -19,8 +19,17 @@ Run all commands through the bridge:
 /home/hardi/usecomputer-wsl <command> [args]
 ```
 
-> **CRITICAL**: Do NOT use the `vision_analyze` tool. It will always time out.
-> Use `window list --json` to locate windows, and standard UI conventions for button positions.
+> **CRITICAL**: When using `vision_analyze`, you MUST pass the **Windows browser URL** of the screenshot,
+> not the Linux path. Use this exact pattern:
+>
+> ```bash
+> /home/hardi/usecomputer-wsl screenshot /tmp/shot.png --json
+> # Then pass this URL to vision_analyze:
+> # file:////wsl.localhost/Ubuntu/tmp/shot.png
+> ```
+>
+> The Linux path `/tmp/shot.png` maps to the browser-accessible URL `file:////wsl.localhost/Ubuntu/tmp/shot.png`.
+> Always use the `file:////wsl.localhost/Ubuntu/tmp/<filename>` form when calling vision_analyze.
 
 ---
 
