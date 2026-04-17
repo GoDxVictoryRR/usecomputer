@@ -1,7 +1,7 @@
 ---
 name: usecomputer
 description: Control your Windows Host from WSL2 — screenshot, click, type, press key.
-version: 1.5.0
+version: 1.9.0
 author: remorses
 license: MIT
 platforms: [macos, linux, windows]
@@ -22,21 +22,45 @@ Control your computer's desktop using a native Windows bridge.
 > **YOU MUST USE THE WRAPPER SCRIPT AT THIS EXACT PATH:**
 > `/home/hardi/usecomputer-wsl`
 >
-> 1. To see the screen: `/home/hardi/usecomputer-wsl screenshot ./shot.png --json`
-> 2. To open an App (e.g. Epic Games):
->    - `/home/hardi/usecomputer-wsl press "ctrl+escape"`
->    - `/home/hardi/usecomputer-wsl type "Epic Games"`
->    - `/home/hardi/usecomputer-wsl press "enter"`
+> 1. **To see the screen**: `/home/hardi/usecomputer-wsl screenshot ./shot.png --json`
+> 2. **To click something**: 
+>    - Perform step 1 to take a screenshot.
+>    - Locate the coordinates in the image or ask the user.
+>    - Run: `/home/hardi/usecomputer-wsl click -x <x> -y <y>`
 
 ## Quick Reference table for the AI
 
 | Action | Command |
 | --- | --- |
-| **Open Start Menu** | `/home/hardi/usecomputer-wsl press "ctrl+escape"` |
-| **Launch App** | `/home/hardi/usecomputer-wsl press "ctrl+escape"`, then type name, then press "enter" |
+| **Screenshot** | `/home/hardi/usecomputer-wsl screenshot ./shot.png --json` |
+| **Click** | `/home/hardi/usecomputer-wsl click -x 500 -y 500` |
 
 ## Pitfalls
 
-- **DO NOT USE "win"**: The "win" key code is unstable. Always use "ctrl+escape" to open the Windows Start menu.
+- **NEVER FAKE JSON STRINGS**: Do not pass complex JSON or --coord-map to the click command. Keep it simple.
+- **NEVER GUESS COORDINATES**: Do not make up x/y values. If you are unsure, ask the user: "Where is the [button name]? Please give me x/y coordinates."
+- **DO NOT USE "win"**: Use "ctrl+escape" for the Start menu.
+- **NEVER** use `execute_code` or `python`. Always use the bridge script.
+>
+> 1. **To see the screen**: `/home/hardi/usecomputer-wsl screenshot ./shot.png --json`
+> 2. **To click something**: Perform step 1, find the x/y coordinates of your target, then run:
+>    `/home/hardi/usecomputer-wsl click -x <x> -y <y> --coord-map "<coordMap_from_json>"`
+> 3. **To open an App (Visual Click)**:
+>    - `/home/hardi/usecomputer-wsl press "ctrl+escape"`
+>    - `/home/hardi/usecomputer-wsl type "Epic Games Launcher"`
+>    - `/home/hardi/usecomputer-wsl screenshot ./search.png --json`
+>    - (Find the "Open" button in `search.png` and click it)
+
+## Quick Reference table for the AI
+
+| Action | Command |
+| --- | --- |
+| **Screenshot** | `/home/hardi/usecomputer-wsl screenshot ./shot.png --json` |
+| **Click** | `/home/hardi/usecomputer-wsl click -x 500 -y 500 --coord-map "..."` |
+| **Open Start** | `/home/hardi/usecomputer-wsl press "ctrl+escape"` |
+
+## Pitfalls
+
+- **DO NOT USE "win"**: Use "ctrl+escape" for the Start menu.
 - **NEVER** use `execute_code`.
-- **NEVER** use `browser_navigate`.
+- **COORDINATES**: Always use the `--coord-map` returned by the `screenshot` command for accurate clicking.
