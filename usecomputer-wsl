@@ -1,24 +1,26 @@
 #!/bin/bash
 # usecomputer-wsl
-# v3.0 - Simplified bridge using Windows cmd.exe
+# v4.0 - Universal WSL to Windows Bridge
+# ----------------------------------------------------------------------------------
+# Transparently passes all Anthropic Computer Use commands from WSL to the native 
+# Windows 'usecomputer' executable, mapping any output paths to Windows format seamlessly.
 
-COMMAND="$1"
+args=()
 
-if [[ "$COMMAND" == "screenshot" ]] && [[ -n "$2" ]]; then
-    TARGET_FILE="$2"
-    shift
-    shift
-    WIN_TEMP_NAME="wsl-bridge-shot.png"
-    # Capture to Windows TEMP using cmd.exe
-    /mnt/c/Windows/system32/cmd.exe /c "npx usecomputer screenshot %TEMP%\\$WIN_TEMP_NAME $@"
-    
-    # Move back to WSL
-    cp "/mnt/c/Users/hardi/AppData/Local/Temp/$WIN_TEMP_NAME" "$TARGET_FILE" 2>/dev/null
-    
-    # Return standard JSON back to the agent
-    echo "{\"path\": \"$TARGET_FILE\", \"status\": \"success\"}"
-else
-    # For click, type, press: forward arguments via standard cmd.exe. 
-    # Do NOT use complex JSON here. Use simple flags (e.g. click -x 10 -y 10).
-    /mnt/c/Windows/system32/cmd.exe /c npx usecomputer "$@"
-fi
+for arg in "$@"; do
+    # If the argument looks like a relative or absolute file path intended for output,
+    # translate it to a Windows UNC path so the native binary can write to WSL directly.
+    if [[ "$arg" == *.png ]] || [[ "$arg" == *.jpg ]] || [[ "$arg" == *.json ]]; then
+        win_path=$(wslpath -w "$arg" 2>/dev/null)
+        if [[ -n "$win_path" ]]; then
+            args+=("$win_path")
+        else
+            args+=("$arg")
+        fi
+    else
+        args+=("$arg")
+    fi
+done
+
+# Execute seamlessly on the Windows host using cmd.exe for safe parsing
+/mnt/c/Windows/system32/cmd.exe /c npx usecomputer "${args[@]}"
