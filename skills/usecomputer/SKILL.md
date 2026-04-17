@@ -1,7 +1,7 @@
 ---
 name: usecomputer
-description: Control your Windows Host from WSL2 — screenshot, click, type, press key, scroll, drag.
-version: 2.0.0
+description: Control your Windows Host from WSL2 — screenshot, click, type, press key, scroll, drag, hover, debug-point, window list.
+version: 2.1.0
 author: remorses
 license: MIT
 platforms: [macos, linux, windows]
@@ -14,7 +14,7 @@ metadata:
 
 # MANDATORY: DO NOT USE PYTHON OR BROWSER TOOLS FOR THIS SKILL.
 
-Control your computer's desktop using a native Windows bridge. This tool provides full 1:1 parity with the Anthropic Computer Use standard.
+Control your computer's desktop using a native Windows bridge. This tool provides full 100% parity with the `remorses/usecomputer` standard.
 
 ## Procedure
 
@@ -28,19 +28,22 @@ Control your computer's desktop using a native Windows bridge. This tool provide
 >    - Locate the coordinates in the image or ask the user.
 >    - Run: `/home/hardi/usecomputer-wsl click -x <x> -y <y>`
 
-## Quick Reference table for the AI (Full Capabilities)
+## Comprehensive Command List (remorses/usecomputer API)
 
-| Action | Command |
-| --- | --- |
-| **Screenshot** | `/home/hardi/usecomputer-wsl screenshot ./shot.png --json` |
-| **Left Click** | `/home/hardi/usecomputer-wsl click -x 500 -y 500` |
-| **Right Click** | `/home/hardi/usecomputer-wsl click -x 500 -y 500 --button right` |
-| **Double Click**| `/home/hardi/usecomputer-wsl click -x 500 -y 500 --count 2` |
-| **Drag** | `/home/hardi/usecomputer-wsl drag 100,200 500,600` |
-| **Scroll** | `/home/hardi/usecomputer-wsl scroll down 5` |
-| **Type Text** | `/home/hardi/usecomputer-wsl type "Hello"` |
-| **Press Key** | `/home/hardi/usecomputer-wsl press "enter"` (Use "ctrl+escape" for Start) |
-| **List Windows**| `/home/hardi/usecomputer-wsl window list --json` |
+| Action | Command / Flags supported |
+| :--- | :--- |
+| **Screenshot** | `screenshot [path] [--display id] [--window id] [--region x,y,w,h] [--annotate] [--json]` |
+| **Debug Point** | `debug-point -x <x> -y <y> --output ./debug.png --json` (Validates click target visually) |
+| **Left Click** | `click -x <x> -y <y>` |
+| **Right Click** | `click -x <x> -y <y> --button right` |
+| **Double Click**| `click -x <x> -y <y> --count 2` |
+| **Hover/Move** | `hover -x <x> -y <y>`  (Or `mouse move -x <x> -y <y>`) |
+| **Drag** | `drag <from_x,y> <to_x,y> [bezier_cp_x,y]` (Supports curves and circles) |
+| **Scroll** | `scroll <up/down/left/right> [amount]` |
+| **Type Text** | `type "Hello" [--delay ms]` or pipe standard input `cat file | ./usecomputer-wsl type --stdin` |
+| **Press Key** | `press "ctrl+escape"` (Supports key combinations like "cmd+shift+p", "enter") |
+| **Inspect Env** | `window list --json`, `display list --json`, `desktop list --json` |
+| **Mouse State** | `mouse position --json`, `mouse down --button left`, `mouse up` |
 
 ## Pitfalls
 
