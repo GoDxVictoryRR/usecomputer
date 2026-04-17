@@ -1,7 +1,7 @@
 ---
 name: usecomputer
-description: Control your Windows Host from WSL2 — screenshot, click, type, press key.
-version: 1.9.0
+description: Control your Windows Host from WSL2 — screenshot, click, type, press key, scroll, drag.
+version: 2.0.0
 author: remorses
 license: MIT
 platforms: [macos, linux, windows]
@@ -14,7 +14,7 @@ metadata:
 
 # MANDATORY: DO NOT USE PYTHON OR BROWSER TOOLS FOR THIS SKILL.
 
-Control your computer's desktop using a native Windows bridge.
+Control your computer's desktop using a native Windows bridge. This tool provides full 1:1 parity with the Anthropic Computer Use standard.
 
 ## Procedure
 
@@ -28,12 +28,19 @@ Control your computer's desktop using a native Windows bridge.
 >    - Locate the coordinates in the image or ask the user.
 >    - Run: `/home/hardi/usecomputer-wsl click -x <x> -y <y>`
 
-## Quick Reference table for the AI
+## Quick Reference table for the AI (Full Capabilities)
 
 | Action | Command |
 | --- | --- |
 | **Screenshot** | `/home/hardi/usecomputer-wsl screenshot ./shot.png --json` |
-| **Click** | `/home/hardi/usecomputer-wsl click -x 500 -y 500` |
+| **Left Click** | `/home/hardi/usecomputer-wsl click -x 500 -y 500` |
+| **Right Click** | `/home/hardi/usecomputer-wsl click -x 500 -y 500 --button right` |
+| **Double Click**| `/home/hardi/usecomputer-wsl click -x 500 -y 500 --count 2` |
+| **Drag** | `/home/hardi/usecomputer-wsl drag 100,200 500,600` |
+| **Scroll** | `/home/hardi/usecomputer-wsl scroll down 5` |
+| **Type Text** | `/home/hardi/usecomputer-wsl type "Hello"` |
+| **Press Key** | `/home/hardi/usecomputer-wsl press "enter"` (Use "ctrl+escape" for Start) |
+| **List Windows**| `/home/hardi/usecomputer-wsl window list --json` |
 
 ## Pitfalls
 
